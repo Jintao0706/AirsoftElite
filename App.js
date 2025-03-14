@@ -11,5 +11,6 @@ export default function App() {
   };
 
   //Testing if I can modify this clone 
+  //Testing testing
   return isLoggedIn ? <HomeScreen /> : <LoginScreen onLoginSuccess={handleLoginSuccess} />;
 }

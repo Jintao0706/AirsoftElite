@@ -7,25 +7,25 @@ export default function EventsScreen() {
         {
             id: 1,
             title: 'Ambush Airsoft',
-            image: require('../photos/ambushAS.jpg'),
+            image: require('../src/photos/ambushAS.jpg'),
             status: 'Outdoor Airsoft & Paintball'
         },
         {
             id: 2,
             title: 'Panther Airsoft',
-            image: require('../photos/pantherAS.jpg'),
+            image: require('../src/photos/pantherAS.jpg'),
             status: 'Outdoer Airsoft with CQB section'
         },
         {
             id: 3,
             title: 'Richmond Airsoft',
-            image: require('../photos/richmondAS.jpg'),
+            image: require('../src/photos/richmondAS.jpg'),
             status: 'Indoor Airsoft & Paintball for CQB lovers'
         },
         {
             id: 4,
             title: 'Delta Force Airsoft',
-            image: require('../photos/deltaforceAS.jpg'),
+            image: require('../src/photos/deltaforceAS.jpg'),
             status: 'Outdoor Airsoft'
         }
     ];

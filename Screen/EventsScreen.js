@@ -2,41 +2,97 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import colors from '../src/color';
 
-export default function EventsScreen() {
+export default function EventsScreen({ navigation }) {
     const events = [
         {
             id: 1,
             title: 'Ambush Airsoft',
             image: require('../src/photos/ambushAS.jpg'),
-            status: 'Outdoor Airsoft & Paintball'
+            status: 'Outdoor Airsoft & Paintball',
+            description: 'Experience tactical combat in our expansive outdoor field with natural cover, bunkers, and objective-based missions. Perfect for both beginner and experienced players.',
+            features: [
+                'Large outdoor field',
+                'Multiple game modes',
+                'Rental equipment available',
+                'Free parking'
+            ],
+            address: '7550 160 St, Surrey, BC',
+            hours: 'Sat-Sun: 7:15AM-10:30PM',
+            price: '$35 entry fee, $20 equipment rental',
+            coordinates: { latitude: 49.1377, longitude: -122.7775 }
         },
         {
             id: 2,
             title: 'Panther Airsoft',
             image: require('../src/photos/pantherAS.jpg'),
-            status: 'Outdoer Airsoft with CQB section'
+            status: 'Outdoor Airsoft with CQB section',
+            description: 'Panther Airsoft offers the best of both worlds with extensive outdoor terrain and a dedicated CQB section for close-quarters tactical training and gameplay.',
+            features: [
+                'Mixed terrain environment',
+                'Dedicated CQB building',
+                'Team-based scenarios',
+                'Professional referees',
+                'Pro shop on premises'
+            ],
+            address: '19022 16 Ave, Surrey, BC',
+            hours: 'Fri: 4PM-10PM, Sat-Sun: 10AM-6PM',
+            price: '$40 entry fee, $30 equipment rental',
+            coordinates: { latitude: 49.0277, longitude: -122.6961 }
         },
         {
             id: 3,
             title: 'Richmond Airsoft',
             image: require('../src/photos/richmondAS.jpg'),
-            status: 'Indoor Airsoft & Paintball for CQB lovers'
+            status: 'Indoor Airsoft & Paintball for CQB lovers',
+            description: 'Richmond Airsoft is the premier indoor facility featuring multi-level playing areas, urban-style structures, and climate-controlled environment for year-round gameplay.',
+            features: [
+                'Indoor climate-controlled facility',
+                'Multi-level playing field',
+                'Monthly tournaments',
+                'Intense CQB with team-based scenarios'
+            ],
+            address: '6631 Westminster Hwy #160, Richmond, BC',
+            hours: 'Wed-Fri: 5PM-11PM, Sat-Sun: 11AM-11PM',
+            price: '$30 entry fee, $20 equipment rental',
+            coordinates: { latitude: 49.1718, longitude: -123.1542 }
         },
         {
             id: 4,
             title: 'Delta Force Airsoft',
             image: require('../src/photos/deltaforceAS.jpg'),
-            status: 'Outdoor Airsoft'
+            status: 'Outdoor Airsoft',
+            description: 'Delta Force offers military-style missions on our expansive outdoor terrain with custom-built structures, bunkers, and varied landscape for dynamic gameplay scenarios.',
+            features: [
+                'Largest outdoor field in BC',
+                'Military simulation events',
+                'Full-day operations',
+                'Experienced staff',
+            ],
+            address: '25927 128 Ave, Maple Ridge, BC',
+            hours: 'Sat-Sun: 8AM-6PM',
+            price: '$45 full day, $25 half day, $25 equipment rental',
+            coordinates: { latitude: 49.2357, longitude: -122.5036 }
         }
     ];
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.heading}>Vancouver Airsoft Events</Text>
+            <View style={styles.headerContainer}>
+                <Image
+                    source={require('../src/photos/trident.png')}
+                    style={styles.logo}
+                    resizeMode="contain"
+                />
+                <Text style={styles.appName}>Airsoft Elite</Text>
+            </View>
 
             <View style={styles.eventsContainer}>
                 {events.map((event) => (
-                    <TouchableOpacity key={event.id} style={styles.eventCard}>
+                    <TouchableOpacity
+                        key={event.id}
+                        style={styles.eventCard}
+                        onPress={() => navigation.navigate('EventDetail', { event })}
+                    >
                         <Image source={event.image} style={styles.eventImage} />
                         <View style={styles.eventInfo}>
                             <Text style={styles.eventStatus}>{event.status}</Text>
@@ -55,11 +111,19 @@ const styles = StyleSheet.create({
         backgroundColor: colors.odgreenLight,
         padding: 10,
     },
-    heading: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginVertical: 15,
+    headerContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
         marginLeft: 10,
+    },
+    logo: {
+        width: 400,
+        height: 400,
+        marginVertical: -50,
+    },
+    appName: {
+        fontSize: 40,
+        fontWeight: 'bold',
         color: colors.desertLight,
     },
     eventsContainer: {

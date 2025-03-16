@@ -10,6 +10,7 @@ import EventsScreen from './EventsScreen';
 import EventDetailScreen from './EventDetailScreen';
 import colors from '../src/color';
 import ResetPasswordScreen from './ChangePasswordScreen';
+import ProfileScreen from './ProfileScreen';
 
 
 function HomeScreenContent() {
@@ -61,6 +62,11 @@ function SettingsStack() {
         name="Return to Settings" 
         component={SettingScreen} 
         options={{ headerShown: false }} 
+      />
+      <Stack.Screen 
+        name="ProfileScreen" 
+        component={ProfileScreen} 
+        options={{ headerTitle: '' }}
       />
       <Stack.Screen 
         name="ResetPassword" 

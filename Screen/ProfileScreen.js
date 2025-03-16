@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  Alert,
+  StyleSheet,
+  Image,
+  TouchableOpacity
+} from 'react-native';
 import { auth } from '../src/firebaseConfig';
 import { firebase_app } from '../src/firebaseConfig';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function ProfileScreen({ onProfileComplete }) {
+export default function ProfileScreen(props) {
+  const { navigation, onProfileComplete } = props;
+  const isEdit = props.route?.params?.edit === true;
+  const isFirstTime = !isEdit && typeof onProfileComplete === 'function';
+
   const [name, setName] = useState('');
-  // Instead of a single string, we use an array to allow multiple selections
+  // For multiple player types; if you only want one, switch to a single string.
   const [selectedPlayerTypes, setSelectedPlayerTypes] = useState([]);
+
   const db = getFirestore(firebase_app);
 
   const playerTypes = [
@@ -20,7 +34,31 @@ export default function ProfileScreen({ onProfileComplete }) {
     { label: "Strategy Player", value: "strategy player", image: require('../assets/1.png') },
   ];
 
-  // Toggle selection: add if not selected, remove if already selected
+  // If editing, fetch the existing data from Firestore
+  useEffect(() => {
+    if (!isFirstTime) {
+      // i.e. in edit mode, we attempt to load data
+      const fetchUserData = async () => {
+        try {
+          const currentUser = auth.currentUser;
+          if (!currentUser) return;
+
+          const userRef = doc(db, 'users', currentUser.uid);
+          const snapshot = await getDoc(userRef);
+          if (snapshot.exists()) {
+            const data = snapshot.data();
+            setName(data.name || '');
+            setSelectedPlayerTypes(data.playerTypes || []);
+          }
+        } catch (error) {
+          console.error('Error fetching profile data:', error);
+        }
+      };
+      fetchUserData();
+    }
+  }, [isFirstTime]);
+
+  // Toggle selection for multiple player types
   const handleTogglePlayerType = (value) => {
     if (selectedPlayerTypes.includes(value)) {
       setSelectedPlayerTypes(selectedPlayerTypes.filter(item => item !== value));
@@ -29,25 +67,45 @@ export default function ProfileScreen({ onProfileComplete }) {
     }
   };
 
+  // Save profile data
   const handleSaveProfile = async () => {
     if (!name) {
-      Alert.alert('Please enter your name');
+      Alert.alert('Error', 'Please enter your name');
       return;
     }
     const user = auth.currentUser;
     if (!user) {
-      Alert.alert('User not authenticated');
+      Alert.alert('Error', 'User not authenticated');
       return;
     }
+
     try {
-      // Save structured data to Firestore; store selectedPlayerTypes as an array
       await setDoc(doc(db, 'users', user.uid), {
         name,
         playerTypes: selectedPlayerTypes,
       });
-      Alert.alert('Profile Saved', 'Your profile has been saved successfully.', [
-        { text: 'OK', onPress: onProfileComplete },
-      ]);
+
+      if (isFirstTime) {
+        // First-time flow: call onProfileComplete (provided by App.js)
+        Alert.alert('Profile Saved', 'Your profile has been saved successfully.', [
+          {
+            text: 'OK',
+            onPress: () => {
+              if (onProfileComplete) onProfileComplete();
+            }
+          }
+        ]);
+      } else {
+        // Edit flow: go back to the previous screen in the stack
+        Alert.alert('Profile Updated', 'Your profile has been updated.', [
+          {
+            text: 'OK',
+            onPress: () => {
+              if (navigation) navigation.goBack();
+            }
+          }
+        ]);
+      }
     } catch (error) {
       Alert.alert('Error saving profile', error.message);
     }
@@ -55,10 +113,12 @@ export default function ProfileScreen({ onProfileComplete }) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* Main container separates top content and bottom button */}
       <View style={styles.container}>
         <View style={styles.content}>
-          <Text style={styles.title}>Complete Your Profile</Text>
+          <Text style={styles.title}>
+            {isFirstTime ? 'Complete Your Profile' : 'Edit Your Profile'}
+          </Text>
+
           <Text style={styles.label}>Enter Your User Name:</Text>
           <TextInput
             style={styles.input}
@@ -66,6 +126,7 @@ export default function ProfileScreen({ onProfileComplete }) {
             value={name}
             onChangeText={setName}
           />
+
           <Text style={styles.label}>Select Your Player Type:</Text>
           <View style={styles.gridContainer}>
             {playerTypes.map((item) => (
@@ -73,7 +134,7 @@ export default function ProfileScreen({ onProfileComplete }) {
                 key={item.value}
                 style={[
                   styles.gridItem,
-                  selectedPlayerTypes.includes(item.value) && styles.selectedGridItem,
+                  selectedPlayerTypes.includes(item.value) && styles.selectedGridItem
                 ]}
                 onPress={() => handleTogglePlayerType(item.value)}
               >
@@ -83,6 +144,7 @@ export default function ProfileScreen({ onProfileComplete }) {
             ))}
           </View>
         </View>
+
         <Button title="Save Profile" onPress={handleSaveProfile} />
       </View>
     </SafeAreaView>
@@ -94,7 +156,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  
   container: {
     flex: 1,
     padding: 16,
@@ -130,7 +191,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   gridItem: {
-    width: '30%', // roughly 3 items per row
+    width: '30%',
     alignItems: 'center',
     marginBottom: 20,
     padding: 8,
@@ -139,7 +200,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   selectedGridItem: {
-    borderColor: 'blue', // highlight selected item
+    borderColor: 'blue',
   },
   gridImage: {
     width: 50,
@@ -151,6 +212,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+
 
 
 

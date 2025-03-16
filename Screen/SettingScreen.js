@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../src/firebaseConfig';  // adjust path as needed
-import colors from '../src/color';                 // remove/adjust if not using color.js
+import colors from '../src/color';                 // adjust or remove if not using
+
 
 export default function SettingScreen({ navigation }) {
   const [userName, setUserName] = useState('');
@@ -31,7 +32,6 @@ export default function SettingScreen({ navigation }) {
 
         if (snapshot.exists()) {
           const data = snapshot.data();
-          // Adjust field names if your Firestore doc is different
           setUserName(data.name || '');
           setPlayerType(data.playerType || '');
         }
@@ -44,13 +44,22 @@ export default function SettingScreen({ navigation }) {
   }, []);
 
   const handleLogout = () => {
-    // TODO: Implement your logout logic
-    // e.g., auth.signOut().then(() => navigation.replace('Login'));
+    // TODO: Implement your logout logic, e.g.
+    // auth.signOut().then(() => navigation.replace('Login'));
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.Title}>Personal Detail</Text>
+      {/* Header with title and Edit button */}
+      <View style={styles.headerRow}>
+        <Text style={styles.Title}>Personal Detail</Text>
+        <TouchableOpacity 
+          style={styles.editButtonContainer}
+          onPress={() => navigation.navigate('ProfileScreen', { edit: true })}
+        >
+          <Text style={styles.editButtonText}>Edit</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* 1) User Name (non-clickable) */}
       <View style={styles.row}>
@@ -75,7 +84,7 @@ export default function SettingScreen({ navigation }) {
         style={styles.row}
         onPress={() => navigation.navigate('ResetPassword')}
       >
-        <Text style={styles.label}>Reset Password</Text>
+        <Text style={styles.label}>Change Password</Text>
       </TouchableOpacity>
 
       {/* Logout Button at the bottom center */}
@@ -89,13 +98,29 @@ export default function SettingScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.odgreenLight, // or any background color you prefer
+    backgroundColor: colors.odgreenLight,
     padding: 16,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
   },
   Title: {
     fontSize: 18,
     color: colors.desertLight,
-    marginBottom: 12,
+  },
+  editButtonContainer: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    backgroundColor: colors.desertLight,
+    borderRadius: 4,
+  },
+  editButtonText: {
+    color: colors.odgreenDark,
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   row: {
     flexDirection: 'row',
@@ -128,6 +153,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
 
 
 

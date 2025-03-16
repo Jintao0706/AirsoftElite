@@ -1,7 +1,9 @@
+// App.js
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth } from './src/firebaseConfig'; 
+import { onAuthStateChanged } from 'firebase/auth'; // Add this import
 import LoginScreen from './Screen/LoginScreen';
 import HomeScreen from './Screen/HomeScreen';
 import ProfileScreen from './Screen/ProfileScreen';
@@ -10,35 +12,39 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [profileCompleted, setProfileCompleted] = useState(null); // null means "not yet loaded"
 
-  // After login, check local storage for *this user's* profile completion flag
+  // Listen for changes in the Firebase Auth user
   useEffect(() => {
-    const checkProfile = async () => {
-      const user = auth.currentUser;
-      if (!user) {
-        // If somehow isLoggedIn but no user, default to false
-        setProfileCompleted(false);
-        return;
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // If a user is logged in, we check their profile completion status
+        setIsLoggedIn(true);
+        checkProfileCompletion(user);
+      } else {
+        // If no user, user is logged out => show login
+        setIsLoggedIn(false);
+        setProfileCompleted(false); // So we don't show ProfileScreen
       }
+    });
 
-      const key = `profileCompleted:${user.uid}`; // Per-user key
-      try {
-        const flag = await AsyncStorage.getItem(key);
-        setProfileCompleted(flag === 'true');
-      } catch (error) {
-        console.error('Error reading profile flag', error);
-        setProfileCompleted(false);
-      }
-    };
+    // Cleanup the subscription on unmount
+    return () => unsubscribe();
+  }, []);
 
-    if (isLoggedIn) {
-      checkProfile();
+  // Check if the user has completed their profile
+  const checkProfileCompletion = async (user) => {
+    const key = `profileCompleted:${user.uid}`;
+    try {
+      const flag = await AsyncStorage.getItem(key);
+      setProfileCompleted(flag === 'true');
+    } catch (error) {
+      console.error('Error reading profile flag', error);
+      setProfileCompleted(false);
     }
-  }, [isLoggedIn]);
+  };
 
   // Called from LoginScreen after successful login
   const handleLoginSuccess = () => {
-    setIsLoggedIn(true);
-    setProfileCompleted(null); // reset while check
+
   };
 
   // Called from ProfileScreen after user saves their profile
@@ -65,6 +71,7 @@ export default function App() {
     return <HomeScreen />;
   }
 }
+
 
 
 

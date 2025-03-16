@@ -20,7 +20,7 @@ export default function ProfileScreen(props) {
   const isFirstTime = !isEdit && typeof onProfileComplete === 'function';
 
   const [name, setName] = useState('');
-  // For multiple player types; if you only want one, switch to a single string.
+  // For multiple player types; if only want one, switch to a single string.
   const [selectedPlayerTypes, setSelectedPlayerTypes] = useState([]);
 
   const db = getFirestore(firebase_app);
@@ -37,7 +37,6 @@ export default function ProfileScreen(props) {
   // If editing, fetch the existing data from Firestore
   useEffect(() => {
     if (!isFirstTime) {
-      // i.e. in edit mode, we attempt to load data
       const fetchUserData = async () => {
         try {
           const currentUser = auth.currentUser;
@@ -86,7 +85,7 @@ export default function ProfileScreen(props) {
       });
 
       if (isFirstTime) {
-        // First-time flow: call onProfileComplete (provided by App.js)
+        // First-time flow
         Alert.alert('Profile Saved', 'Your profile has been saved successfully.', [
           {
             text: 'OK',
@@ -96,7 +95,7 @@ export default function ProfileScreen(props) {
           }
         ]);
       } else {
-        // Edit flow: go back to the previous screen in the stack
+        // Edit flow
         Alert.alert('Profile Updated', 'Your profile has been updated.', [
           {
             text: 'OK',

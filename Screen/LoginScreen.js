@@ -25,17 +25,23 @@ export default function LoginScreen({ onLoginSuccess }) {
   const handleSignUp = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      Alert.alert('Registration Successful', `Welcome, ${userCredential.user.email}!`, [
-        { text: 'OK', onPress: () => setIsRegisterMode(false) },
-      ]);
+      // Immediately sign the user out
+      await auth.signOut();
+      Alert.alert(
+        'Registration Successful',
+        `Registration successful! Please log in with your credentials.`,
+        [
+          { text: 'OK', onPress: () => setIsRegisterMode(false) },
+        ]
+      );
     } catch (error) {
       Alert.alert('Registration Failed', error.message);
     }
   };
+  
 
   if (isRegisterMode) {
     return (
-      // 2) 用 SafeAreaView 替换 View (或包裹外层)
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
           <Text style={styles.title}>Register with Firebase</Text>

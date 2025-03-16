@@ -43,9 +43,13 @@ export default function SettingScreen({ navigation }) {
     fetchUserData();
   }, []);
 
-  const handleLogout = () => {
-    // TODO: Implement your logout logic, e.g.
-    // auth.signOut().then(() => navigation.replace('Login'));
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      // No extra navigation needed; App.js will detect user === null and show Login
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   return (

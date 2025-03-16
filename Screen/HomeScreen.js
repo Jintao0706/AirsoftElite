@@ -4,24 +4,18 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-
+import SettingScreen from './SettingScreen';
 import WeatherMap from './WeatherMap';
 import EventsScreen from './EventsScreen';
 import EventDetailScreen from './EventDetailScreen';
 import colors from '../src/color';
+import ResetPasswordScreen from './ChangePasswordScreen';
+
 
 function HomeScreenContent() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Welcome to the Home Screen!</Text>
-    </View>
-  );
-}
-
-function SettingsScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Settings Screen</Text>
     </View>
   );
 }
@@ -60,7 +54,25 @@ function EventsStack() {
   );
   // How to create complex stack navigations learned from : https://reactnavigation.org/docs/stack-navigator/
 }
-
+function SettingsStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="Return to Settings" 
+        component={SettingScreen} 
+        options={{ headerShown: false }} 
+      />
+      <Stack.Screen 
+        name="ResetPassword" 
+        component={ResetPasswordScreen} 
+        options={{ 
+          headerTitle: '',
+          headerBackTitleVisible: false,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
 // Main component with navigation setup
 export default function MainNavigator() {
   return (
@@ -96,7 +108,7 @@ export default function MainNavigator() {
         <Tab.Screen name="Home" component={HomeScreenContent} />
         <Tab.Screen name="Weather" component={WeatherMap} />
         <Tab.Screen name="Events" component={EventsStack} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="Settings" component={SettingsStack} />
       </Tab.Navigator>
     </NavigationContainer>
   );

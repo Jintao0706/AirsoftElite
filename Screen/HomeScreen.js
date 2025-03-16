@@ -57,21 +57,35 @@ function EventsStack() {
 }
 function SettingsStack() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen 
-        name="Return to Settings" 
-        component={SettingScreen} 
-        options={{ headerShown: false }} 
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.odgreenLight, 
+        },
+        headerTintColor: colors.desertLight,    
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontSize: 18,
+        },
+      }}
+    >
+      <Stack.Screen
+        name="SettingScreen"  //RETURN
+        component={SettingScreen}
+        options={{ headerShown: false }}
       />
-      <Stack.Screen 
-        name="ProfileScreen" 
-        component={ProfileScreen} 
-        options={{ headerTitle: '' }}
+      <Stack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{
+          headerShown: true,
+          title: '', 
+        }}
       />
-      <Stack.Screen 
-        name="ResetPassword" 
-        component={ResetPasswordScreen} 
-        options={{ 
+      <Stack.Screen
+        name="ResetPassword"
+        component={ResetPasswordScreen}
+        options={{
           headerTitle: '',
           headerBackTitleVisible: false,
         }}
@@ -79,6 +93,7 @@ function SettingsStack() {
     </Stack.Navigator>
   );
 }
+
 // Main component with navigation setup
 export default function MainNavigator() {
   return (

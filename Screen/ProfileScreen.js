@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   Alert,
   StyleSheet,
   Image,
@@ -13,6 +12,7 @@ import { auth } from '../src/firebaseConfig';
 import { firebase_app } from '../src/firebaseConfig';
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import colors from '../src/color';
 
 export default function ProfileScreen(props) {
   const { navigation, onProfileComplete } = props;
@@ -144,7 +144,9 @@ export default function ProfileScreen(props) {
           </View>
         </View>
 
-        <Button title="Save Profile" onPress={handleSaveProfile} />
+        <TouchableOpacity style={styles.saveButton} onPress={handleSaveProfile}>
+          <Text style={styles.saveButtonText}>Save Profile</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -153,7 +155,7 @@ export default function ProfileScreen(props) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.odgreenLight,
   },
   container: {
     flex: 1,
@@ -166,22 +168,27 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    marginBottom: 20,
+    marginBottom: 40,
     fontWeight: 'bold',
+    color: colors.desertLight,
   },
   label: {
     width: '80%',
     textAlign: 'left',
     fontSize: 16,
+    fontWeight: 'bold',
     marginBottom: 10,
+    color: colors.desertLight,
   },
   input: {
     width: '80%',
     height: 40,
-    borderColor: 'gray',
+    borderColor: 'transparent',
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 8,
+    backgroundColor: 'white',
+    borderRadius: 4,
   },
   gridContainer: {
     width: '80%',
@@ -197,9 +204,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'transparent',
     borderRadius: 8,
+    backgroundColor: null,
   },
   selectedGridItem: {
-    borderColor: 'blue',
+    borderColor: colors.desertDark,
+    backgroundColor: colors.desertDark,
   },
   gridImage: {
     width: 50,
@@ -208,14 +217,25 @@ const styles = StyleSheet.create({
   },
   gridLabel: {
     fontSize: 12,
+    fontWeight: 'bold',
     textAlign: 'center',
+    color: colors.desert,
+  },
+  saveButton: {
+    width: '40%',
+    height: 50,
+    alignSelf: 'center',
+    borderColor: colors.desertDark,
+    borderWidth: 1,
+    borderRadius: 4,
+    backgroundColor: colors.desertDark, 
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  saveButtonText: {
+    color: colors.odgreenDark,
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
-
-
-
-
-
-
-
-

@@ -1,8 +1,17 @@
+// Password.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { 
+  View, 
+  Text, 
+  TextInput, 
+  Alert, 
+  StyleSheet, 
+  TouchableOpacity 
+} from 'react-native';
 import { updatePassword } from 'firebase/auth';
 import { auth } from '../src/firebaseConfig';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import colors from '../src/color';
 
 export default function ChangePassword({ navigation }) {
   const [newPassword, setNewPassword] = useState('');
@@ -32,22 +41,31 @@ export default function ChangePassword({ navigation }) {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.title}>Change Password</Text>
-        <TextInput
-          placeholder="Enter new password"
-          style={styles.input}
-          secureTextEntry
-          value={newPassword}
-          onChangeText={setNewPassword}
-        />
-        <TextInput
-          placeholder="Confirm new password"
-          style={styles.input}
-          secureTextEntry
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-        />
-        <Button title="Submit" onPress={handleChangePassword} />
+        <View style={styles.content}>
+          <Text style={styles.title}>Change Password</Text>
+
+          <Text style={styles.label}>New Password:</Text>
+          <TextInput
+            placeholder="Enter new password"
+            style={styles.input}
+            secureTextEntry
+            value={newPassword}
+            onChangeText={setNewPassword}
+          />
+
+          <Text style={styles.label}>Confirm New Password:</Text>
+          <TextInput
+            placeholder="Confirm new password"
+            style={styles.input}
+            secureTextEntry
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+          />
+        </View>
+
+        <TouchableOpacity style={styles.saveButton} onPress={handleChangePassword}>
+          <Text style={styles.saveButtonText}>Change Password</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -56,27 +74,56 @@ export default function ChangePassword({ navigation }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: colors.odgreenLight, 
   },
   container: {
     flex: 1,
     padding: 16,
     justifyContent: 'center',
-    alignItems: 'center'
+    paddingBottom: 120,
+  },
+  content: {
+    alignItems: 'center',
   },
   title: {
     fontSize: 20,
+    marginBottom: 40,
     fontWeight: 'bold',
-    marginBottom: 20
+    color: colors.desertLight, 
+  },
+  label: {
+    width: '80%',
+    textAlign: 'left',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: colors.desertLight,
   },
   input: {
     width: '80%',
     height: 40,
+    borderColor: 'transparent',
     borderWidth: 1,
-    borderColor: 'gray',
-    marginBottom: 15,
-    paddingHorizontal: 8
-  }
+    marginBottom: 20,
+    paddingHorizontal: 8,
+    backgroundColor: 'white',
+    borderRadius: 4,
+  },
+  saveButton: {
+    width: '40%',
+    height: 50,
+    alignSelf: 'center',
+    borderColor: colors.desertDark,
+    borderWidth: 1,
+    borderRadius: 4,
+    backgroundColor: colors.desertDark,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  saveButtonText: {
+    color: colors.odgreenDark,
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });
-
-

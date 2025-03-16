@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { firebase_app } from '../src/firebaseConfig';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../src/firebaseConfig';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen({ onLoginSuccess }) {
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const auth = getAuth(firebase_app);
+  
 
-  // Handle user login (navigates to HomeScreen on success)
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -22,12 +22,10 @@ export default function LoginScreen({ onLoginSuccess }) {
     }
   };
 
-  // Handle user registration (returns to login screen on success)
   const handleSignUp = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       Alert.alert('Registration Successful', `Welcome, ${userCredential.user.email}!`, [
-        // Instead of calling onLoginSuccess, we just switch back to the login screen:
         { text: 'OK', onPress: () => setIsRegisterMode(false) },
       ]);
     } catch (error) {
@@ -37,8 +35,39 @@ export default function LoginScreen({ onLoginSuccess }) {
 
   if (isRegisterMode) {
     return (
+      // 2) 用 SafeAreaView 替换 View (或包裹外层)
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Register with Firebase</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+          <Button title="Register" onPress={handleSignUp} />
+          <View style={{ marginTop: 10 }}>
+            <Button title="Return to Login" onPress={() => setIsRegisterMode(false)} />
+          </View>
+          <StatusBar style="auto" />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.title}>Register with Firebase</Text>
+        <Text style={styles.title}>Firebase Authentication</Text>
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -54,46 +83,23 @@ export default function LoginScreen({ onLoginSuccess }) {
           value={password}
           onChangeText={setPassword}
         />
-        <Button title="Register" onPress={handleSignUp} />
+        <Button title="Login" onPress={handleLogin} />
         <View style={{ marginTop: 10 }}>
-          <Button title="Return to Login" onPress={() => setIsRegisterMode(false)} />
+          <Button title="Go to Register" onPress={() => setIsRegisterMode(true)} />
         </View>
         <StatusBar style="auto" />
       </View>
-    );
-  }
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Firebase Authentication</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <Button title="Login" onPress={handleLogin} />
-      <View style={{ marginTop: 10 }}>
-        <Button title="Go to Register" onPress={() => setIsRegisterMode(true)} />
-      </View>
-      <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  container: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 16,

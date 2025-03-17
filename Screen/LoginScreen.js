@@ -150,7 +150,7 @@ export default function LoginScreen({ onLoginSuccess }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.desert, 
+    backgroundColor: colors.odgreenLight, 
   },
   container: {
     flex: 1,
@@ -168,13 +168,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 16,
     fontWeight: 'bold',
-    color: '#000',
+    color: '#fff',
   },
   label: {
     alignSelf: 'flex-start',
     marginLeft: '10%',
     fontSize: 14,
-    color: '#000',
+    color: '#fff',
     marginBottom: 5,
   },
   input: {

@@ -26,12 +26,12 @@ export default function ProfileScreen(props) {
   const db = getFirestore(firebase_app);
 
   const playerTypes = [
-    { label: "Casual Players", value: "casual players", image: require('../assets/1.png') },
-    { label: "Competitive Players", value: "competitive players", image: require('../assets/1.png') },
-    { label: "Milsim Players", value: "milsim players", image: require('../assets/1.png') },
-    { label: "CQB Players", value: "cqb players", image: require('../assets/1.png') },
-    { label: "Sniper", value: "sniper", image: require('../assets/1.png') },
-    { label: "Strategy Player", value: "strategy player", image: require('../assets/1.png') },
+    { label: "Casual Players", value: "casual players", image: require('../src/photos/casual.png') },
+    { label: "Competitive Players", value: "competitive players", image: require('../src/photos/competitive.png') },
+    { label: "Milsim Players", value: "milsim players", image: require('../src/photos/milsim.png') },
+    { label: "CQB Players", value: "cqb players", image: require('../src/photos/cqb.png') },
+    { label: "Sniper", value: "sniper", image: require('../src/photos/sniper.png') },
+    { label: "Strategy Player", value: "strategy player", image: require('../src/photos/strategy.png') },
   ];
 
   // If editing, fetch the existing data from Firestore

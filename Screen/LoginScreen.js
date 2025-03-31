@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Alert,
-  Image,
-  TouchableOpacity
-} from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, Image, TouchableOpacity} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { auth } from '../src/firebaseConfig';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';

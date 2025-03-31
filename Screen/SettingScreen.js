@@ -1,11 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../src/firebaseConfig';
@@ -67,6 +61,7 @@ export default function SettingScreen({ navigation }) {
       <View style={styles.detailBox}>
         <View style={styles.rowLeft}>
           <Image source={require('../assets/user.png')} style={styles.icon} />
+          {/* PNG From : https://www.flaticon.com/free-icon/user_1077114?term=name&page=1&position=2&origin=search&related_id=1077114*/}
           <Text style={styles.label}>User Name</Text>
         </View>
         <Text style={styles.value}>{userName}</Text>
@@ -75,6 +70,7 @@ export default function SettingScreen({ navigation }) {
       <View style={styles.detailBox}>
         <View style={styles.rowLeft}>
           <Image source={require('../assets/mail.png')} style={styles.icon} />
+          {/* PNG From : https://www.flaticon.com/free-icon/mail_16935745?term=email&page=1&position=31&origin=search&related_id=16935745*/}
           <Text style={styles.label}>Email</Text>
         </View>
         <Text style={styles.value}>{email}</Text>
@@ -83,6 +79,7 @@ export default function SettingScreen({ navigation }) {
       <View style={styles.detailBox}>
         <View style={styles.rowLeft}>
           <Image source={require('../assets/weapon.png')} style={styles.icon} />
+          {/* PNG From : https://www.flaticon.com/free-icon/weapon_9958298?term=airsoft&page=1&position=2&origin=search&related_id=9958298*/}
           <Text style={styles.label}>Player Type</Text>
         </View>
         <Text style={styles.value}>{playerTypes}</Text>
@@ -94,6 +91,7 @@ export default function SettingScreen({ navigation }) {
       >
         <View style={styles.rowLeft}>
           <Image source={require('../assets/password.png')} style={styles.icon} />
+          {/* PNG From : https://www.flaticon.com/free-icon/synchronize_3064493?term=reset+password&page=1&position=23&origin=search&related_id=3064493*/}
           <Text style={styles.label}>Change Password</Text>
         </View>
         <Text style={styles.arrow}>{'>'}</Text>

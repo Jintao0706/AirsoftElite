@@ -7,15 +7,14 @@ import {
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { doc, getDoc } from 'firebase/firestore';
-import { auth, db } from '../src/firebaseConfig';  // adjust path as needed
-import colors from '../src/color';                 // adjust or remove if not using
+import { auth, db } from '../src/firebaseConfig';
+import colors from '../src/color';
 
 export default function SettingScreen({ navigation }) {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [playerTypes, setPlayerTypes] = useState(''); 
 
-  // Define a function to fetch user data from Firestore and Auth.
   const fetchUserData = async () => {
     try {
       const currentUser = auth.currentUser;
@@ -27,7 +26,6 @@ export default function SettingScreen({ navigation }) {
       if (snapshot.exists()) {
         const data = snapshot.data();
         setUserName(data.name || '');
-        // If playerTypes is an array, join it into a string.
         setPlayerTypes(
           data.playerTypes && Array.isArray(data.playerTypes)
             ? data.playerTypes.join(', ')
@@ -39,7 +37,6 @@ export default function SettingScreen({ navigation }) {
     }
   };
 
-  // Use useFocusEffect to refresh data when the screen gains focus.
   useFocusEffect(
     useCallback(() => {
       fetchUserData();
@@ -57,35 +54,36 @@ export default function SettingScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
-        <Text style={styles.Title}>Personal Detail</Text>
+        <Text style={styles.title}>Personal Detail</Text>
         <TouchableOpacity 
-          style={styles.editButtonContainer}
+          style={styles.editButton}
           onPress={() => navigation.navigate('ProfileScreen', { edit: true })}
         >
           <Text style={styles.editButtonText}>Edit</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.row}>
+      <View style={styles.detailBox}>
         <Text style={styles.label}>User Name</Text>
         <Text style={styles.value}>{userName}</Text>
       </View>
 
-      <View style={styles.row}>
+      <View style={styles.detailBox}>
         <Text style={styles.label}>Email</Text>
         <Text style={styles.value}>{email}</Text>
       </View>
 
-      <View style={styles.row}>
+      <View style={styles.detailBox}>
         <Text style={styles.label}>Player Type</Text>
         <Text style={styles.value}>{playerTypes}</Text>
       </View>
 
       <TouchableOpacity 
-        style={styles.row}
+        style={[styles.detailBox, styles.touchableBox]}
         onPress={() => navigation.navigate('ResetPassword')}
       >
         <Text style={styles.label}>Change Password</Text>
+        <Text style={styles.arrow}>{'>'}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
@@ -99,54 +97,65 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.odgreenLight,
-    padding: 16,
+    padding: 20,
   },
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 24,
   },
-  Title: {
-    fontSize: 18,
+  title: {
+    fontSize: 20,
     fontWeight: 'bold',
     color: colors.desertLight,
   },
-  editButtonContainer: {
-    paddingVertical: 4,
-    paddingHorizontal: 8,
+  editButton: {
     backgroundColor: colors.desertLight,
-    borderRadius: 4,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 6,
   },
   editButtonText: {
     color: colors.odgreenDark,
-    fontSize: 14,
     fontWeight: 'bold',
+    fontSize: 14,
   },
-  row: {
+  detailBox: {
+    backgroundColor: colors.desertLight,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    marginBottom: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: colors.desertLight,
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 8,
+    alignItems: 'center',
   },
   label: {
     fontSize: 16,
     color: '#000',
+    fontWeight: '500',
   },
   value: {
     fontSize: 16,
     color: '#555',
+    textAlign: 'right',
+    flexShrink: 1,
+    marginLeft: 10,
+  },
+  arrow: {
+    fontSize: 18,
+    color: '#000',
+  },
+  touchableBox: {
+    paddingVertical: 16,
   },
   logoutButton: {
-    position: 'absolute',
-    bottom: 30,
-    alignSelf: 'center',
+    marginTop: 'auto',
     backgroundColor: colors.desertDark,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
   },
   logoutText: {
     color: 'black',
@@ -154,8 +163,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-
-
 
 

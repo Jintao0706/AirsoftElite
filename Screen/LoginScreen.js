@@ -35,7 +35,6 @@ export default function LoginScreen({ onLoginSuccess }) {
   const handleSignUp = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      // Immediately sign the user out
       await auth.signOut();
       Alert.alert(
         'Registration Successful',
@@ -47,69 +46,24 @@ export default function LoginScreen({ onLoginSuccess }) {
     }
   };
 
+  const toggleMode = () => {
+    setIsRegisterMode(!isRegisterMode);
+  };
 
-  // REGISTRATION MODE
-  if (isRegisterMode) {
-    return (
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.container}>
-          {/* Logo Image */}
-          <Image
-            style={styles.logo}
-            source={require('../assets/logo.png')} 
-            resizeMode="contain"
-          />
-
-          <Text style={styles.title}>Register with AirSoft Elite</Text>
-
-          <Text style={styles.label}>Username</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Email or Phone"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={setEmail}
-          />
-
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-          />
-
-          <TouchableOpacity style={styles.customButton} onPress={handleSignUp}>
-            <Text style={styles.buttonText}>Register</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.registerLinkContainer}
-            onPress={() => setIsRegisterMode(false)}
-          >
-            <Text style={styles.registerLink}>Return to Login</Text>
-          </TouchableOpacity>
-
-          <StatusBar style="auto" />
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  // LOGIN MODE
   return (
     <SafeAreaView style={styles.safeArea}>
+      <StatusBar style="auto" />
       <View style={styles.container}>
-
+        {/* Logo */}
         <Image
           style={styles.logo}
-          source={require('../assets/logo.png')} 
+          source={require('../assets/logo.png')}
           resizeMode="contain"
         />
 
-        <Text style={styles.title}>AirSoft Elite</Text>
+        <Text style={styles.title}>
+          {isRegisterMode ? 'Register with AirSoft Elite' : 'AirSoft Elite'}
+        </Text>
 
         <Text style={styles.label}>Username</Text>
         <TextInput
@@ -130,18 +84,23 @@ export default function LoginScreen({ onLoginSuccess }) {
           onChangeText={setPassword}
         />
 
-        <TouchableOpacity style={styles.customButton} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Log In</Text>
+        <TouchableOpacity
+          style={styles.customButton}
+          onPress={isRegisterMode ? handleSignUp : handleLogin}
+        >
+          <Text style={styles.buttonText}>
+            {isRegisterMode ? 'Register' : 'Log In'}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.registerLinkContainer}
-          onPress={() => setIsRegisterMode(true)}
+          style={styles.secondaryButton}
+          onPress={toggleMode}
         >
-          <Text style={styles.registerLink}>Register here</Text>
+          <Text style={styles.secondaryButtonText}>
+            {isRegisterMode ? 'Return to Login' : 'Register here'}
+          </Text>
         </TouchableOpacity>
-
-        <StatusBar style="auto" />
       </View>
     </SafeAreaView>
   );
@@ -150,49 +109,45 @@ export default function LoginScreen({ onLoginSuccess }) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.odgreenLight, 
+    backgroundColor: colors.odgreenLight,
   },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 16,
-    paddingBottom: 150,
+    padding: 20,
   },
   logo: {
-    width: 250,
-    height: 250,
-    marginBottom: 0,
+    width: 200,
+    height: 200,
+    marginBottom: 10,
   },
   title: {
-    fontSize: 18,
-    marginBottom: 16,
+    fontSize: 32,
+    marginBottom: 24,
     fontWeight: 'bold',
-    color: '#fff',
+    color: colors.desertLight,
   },
   label: {
     alignSelf: 'flex-start',
     marginLeft: '10%',
-    fontSize: 14,
-    color: '#fff',
+    fontSize: 16,
+    color: colors.desertLight,
     marginBottom: 5,
   },
   input: {
     width: '80%',
-    height: 40,
-    padding: 8,
-    borderWidth: 1,
-    borderColor: 'transparent',
-    marginBottom: 20,
-    backgroundColor: '#fff',
+    height: 44,
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: colors.desertLight,
+    marginBottom: 16,
   },
   customButton: {
     width: '80%',
     height: 50,
-    borderColor: 'transparent',
-    borderWidth: 1,
-    borderRadius: 4,
-    backgroundColor: colors.desertLight,     
+    backgroundColor: colors.desertLight,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
@@ -202,14 +157,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  registerLinkContainer: {
-    position: 'absolute',
-    bottom: 120,
-    right: 50,
+  secondaryButton: {
+    width: '80%',
+    height: 44,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.desertLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 14,
   },
-  registerLink: {
-    color: '#000',
+  secondaryButtonText: {
+    color: colors.desertLight,
     fontSize: 14,
-    textDecorationLine: 'underline',
+    fontWeight: '500',
   },
 });
+

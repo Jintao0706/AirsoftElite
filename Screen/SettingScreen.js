@@ -1,9 +1,10 @@
 import React, { useState, useCallback } from 'react';
-import { 
-  View, 
-  Text, 
-  TouchableOpacity, 
-  StyleSheet 
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { doc, getDoc } from 'firebase/firestore';
@@ -13,14 +14,14 @@ import colors from '../src/color';
 export default function SettingScreen({ navigation }) {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
-  const [playerTypes, setPlayerTypes] = useState(''); 
+  const [playerTypes, setPlayerTypes] = useState('');
 
   const fetchUserData = async () => {
     try {
       const currentUser = auth.currentUser;
       if (!currentUser) return;
       setEmail(currentUser.email || '');
-      
+
       const userRef = doc(db, 'users', currentUser.uid);
       const snapshot = await getDoc(userRef);
       if (snapshot.exists()) {
@@ -55,7 +56,7 @@ export default function SettingScreen({ navigation }) {
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <Text style={styles.title}>Personal Detail</Text>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.editButton}
           onPress={() => navigation.navigate('ProfileScreen', { edit: true })}
         >
@@ -64,25 +65,37 @@ export default function SettingScreen({ navigation }) {
       </View>
 
       <View style={styles.detailBox}>
-        <Text style={styles.label}>User Name</Text>
+        <View style={styles.rowLeft}>
+          <Image source={require('../assets/user.png')} style={styles.icon} />
+          <Text style={styles.label}>User Name</Text>
+        </View>
         <Text style={styles.value}>{userName}</Text>
       </View>
 
       <View style={styles.detailBox}>
-        <Text style={styles.label}>Email</Text>
+        <View style={styles.rowLeft}>
+          <Image source={require('../assets/mail.png')} style={styles.icon} />
+          <Text style={styles.label}>Email</Text>
+        </View>
         <Text style={styles.value}>{email}</Text>
       </View>
 
       <View style={styles.detailBox}>
-        <Text style={styles.label}>Player Type</Text>
+        <View style={styles.rowLeft}>
+          <Image source={require('../assets/weapon.png')} style={styles.icon} />
+          <Text style={styles.label}>Player Type</Text>
+        </View>
         <Text style={styles.value}>{playerTypes}</Text>
       </View>
 
-      <TouchableOpacity 
+      <TouchableOpacity
         style={[styles.detailBox, styles.touchableBox]}
         onPress={() => navigation.navigate('ResetPassword')}
       >
-        <Text style={styles.label}>Change Password</Text>
+        <View style={styles.rowLeft}>
+          <Image source={require('../assets/password.png')} style={styles.icon} />
+          <Text style={styles.label}>Change Password</Text>
+        </View>
         <Text style={styles.arrow}>{'>'}</Text>
       </TouchableOpacity>
 
@@ -131,6 +144,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  rowLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+    resizeMode: 'contain',
+  },
   label: {
     fontSize: 16,
     color: '#000',
@@ -163,5 +186,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-

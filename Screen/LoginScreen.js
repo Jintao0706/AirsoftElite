@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   customButton: {
     width: '80%',
     height: 50,
-    backgroundColor: colors.desertLight,
+    backgroundColor: colors.desertDark,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: colors.desertLight,
+    borderColor: colors.desertDark,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 14,

@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 8,
-    backgroundColor: 'white',
+    backgroundColor: colors.desertLight,
     borderRadius: 4,
   },
   gridContainer: {
